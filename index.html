@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Todo List</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+        integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"
+        integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+        crossorigin="anonymous"></script>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="./sweetalert.min.js"></script>
+</head>
+
+<body>
+    <template id="todo-template">
+        <form>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <h3>Todo Items
+                            <a class="pull-right btn btn-xs btn-info" data-toggle="collapse" href="#collapseExample"
+                                aria-expanded="false" aria-controls="collapseExample">New To Do</a>
+                        </h3>
+
+                    </div>
+
+                </div>
+                <div class="panel-body" id="todo-container">
+                    <div class="collapse" id="collapseExample">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <textarea class="form-control" id="description"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group margin-top-10">
+                                    <button type="submit" class="btn btn-success btn-block">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <template id="single-todo">
+                        <li class="list-group-item" draggable="true">
+                            <ul class="list-unstyled list-inline">
+                                <li>
+                                    <label class="pull-left"><input type="checkbox"></label>
+                                </li>
+                                <li>
+                                    <h4 class="list-group-item-heading"></h4>
+                                    <small></small>
+                                </li>
+                                <li class="pull-right"><a href="javascript:void(0)" id="edit-todo"><i
+                                            class="fa fa-pencil"></i></a> <a href="javascript:void(0)"
+                                        id="delete-todo"><i class="fa fa-trash text-danger"></i></a></li>
+                            </ul>
+                        </li>
+                    </template>
+                    <template id="todo-list">
+                        <section class="todos">
+                            <label> </label>
+                            <ul class="list-group list-unstyled"></ul>
+                        </section>
+                    </template>
+                </div>
+            </div>
+        </form>
+    </template>
+    <div id="todo">
+
+    </div>
+    <script src="./app.js"></script>
+    <script>
+        const todo = new TodoInput("todo-template", "todo");
+        const activeLodoList = new TodoList("active");
+        const finishedLodoList = new TodoList("finished");
+
+    </script>
+</body>
+
+</html>
