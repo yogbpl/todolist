@@ -69,12 +69,21 @@ class TodoState extends State {
         this.instance = new TodoState();
         return this.instance;
     }
-    addTodo(title) {
-        const dateTime = new Date().toDateString();
+    addTodo(title, dateTime) {
         const newTodo = new Todo(Math.random().toString(), title, dateTime, TodoStatus.Active);
         this.todos.push(newTodo);
         this.updateListeners();
         localStorage.setItem('todo', JSON.stringify(this.todos));
+    }
+    getTodo() {
+        if ("todo" in localStorage) {
+            const getData = JSON.parse(localStorage.getItem('todo'));
+            for (let i = 0; i < getData.length; i++) {
+                let newTodo = new Todo(getData[i].id, getData[i].title, getData[i].date, getData[i].status);
+                this.todos.push(newTodo);
+                this.updateListeners();
+            }
+        }
     }
     moveTodo(todoId, newStatus) {
         const todo = this.todos.find(tod => tod.id === todoId);
@@ -186,6 +195,7 @@ class TodoInput extends Component {
     }
     configure() {
         this.element.addEventListener('submit', this.submitHandler);
+        window.addEventListener('load', this.documentLoadHandlier);
     }
     renderContent() { }
     gatherUserInput() {
@@ -207,11 +217,15 @@ class TodoInput extends Component {
     submitHandler(event) {
         event.preventDefault();
         const userInput = this.gatherUserInput();
+        const dateTime = new Date().toDateString();
         if (Array.isArray(userInput)) {
             const [desc] = userInput;
-            todoState.addTodo(desc);
+            todoState.addTodo(desc, dateTime);
             this.clearInput();
         }
+    }
+    documentLoadHandlier() {
+        todoState.getTodo();
     }
 }
 __decorate([

@@ -100,18 +100,28 @@ class TodoState extends State<Todo> {
         return this.instance;
     }
 
-    addTodo(title: string) {
-        const dateTime: string = new Date().toDateString();
+    addTodo(title: string, dateTime: string) {
         const newTodo = new Todo(Math.random().toString(), title, dateTime, TodoStatus.Active);
         this.todos.push(newTodo);
         this.updateListeners();
         localStorage.setItem('todo', JSON.stringify(this.todos));
     }
 
+    getTodo() {
+        if ("todo" in localStorage) {
+            const getData = JSON.parse(localStorage.getItem('todo'));
+            for (let i = 0; i < getData.length; i++) {
+                let newTodo = new Todo(getData[i].id, getData[i].title, getData[i].date, getData[i].status);
+                this.todos.push(newTodo);
+                this.updateListeners();
+            }
+        }
+    }
     moveTodo(todoId: string, newStatus: TodoStatus) {
         const todo = this.todos.find(tod => tod.id === todoId);
         if (todo) {
             todo.status = newStatus;
+            
             this.updateListeners()
         }
     }
@@ -247,10 +257,13 @@ class TodoInput extends Component<HTMLDivElement, HTMLFormElement> {
         super(template, elem, true);
         this.descriptionInputElement = this.element.querySelector("#description") as HTMLTextAreaElement;
         this.configure();
+
     }
 
     configure() {
+
         this.element.addEventListener('submit', this.submitHandler)
+        window.addEventListener('load', this.documentLoadHandlier);
     }
 
     renderContent() { }
@@ -275,11 +288,16 @@ class TodoInput extends Component<HTMLDivElement, HTMLFormElement> {
     private submitHandler(event: Event) {
         event.preventDefault();
         const userInput = this.gatherUserInput()
+        const dateTime: string = new Date().toDateString();
         if (Array.isArray(userInput)) {
             const [desc] = userInput;
-            todoState.addTodo(desc);
+            todoState.addTodo(desc, dateTime);
             this.clearInput();
         }
 
     }
+    private documentLoadHandlier() {
+        todoState.getTodo();
+    }
+
 }
