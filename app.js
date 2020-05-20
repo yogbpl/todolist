@@ -1,11 +1,11 @@
 "use strict";
+// autobind decorator
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-// autobind decorator
 function autobind(_, _2, descriptor) {
     const originalMethod = descriptor.value;
     const adjDesctiptor = {
@@ -85,6 +85,9 @@ class TodoState extends State {
             }
         }
     }
+    getAllTodo() {
+        return this.todos;
+    }
     moveTodo(todoId, newStatus) {
         const todo = this.todos.find(tod => tod.id === todoId);
         if (todo) {
@@ -141,7 +144,6 @@ class Component {
 class TodoItem extends Component {
     constructor(hostId, todo) {
         super('single-todo', hostId, true, todo.id);
-        this.todos = [];
         this.todo = todo;
         this.configure();
         this.renderContent();
@@ -149,7 +151,16 @@ class TodoItem extends Component {
     }
     setCompleteHandler() {
         const todoId = this.element.id;
-        todoState.moveTodo(todoId, TodoStatus.Finished);
+        const todos = todoState.getAllTodo();
+        const todo = todos.find(tod => tod.id === todoId);
+        if (todo) {
+            if (todo.status == 0) {
+                todoState.moveTodo(todoId, TodoStatus.Finished);
+            }
+            else {
+                todoState.moveTodo(todoId, TodoStatus.Active);
+            }
+        }
     }
     deleteTodoHandler() {
         const todoId = this.element.id;
