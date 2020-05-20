@@ -21,66 +21,82 @@
         crossorigin="anonymous"></script>
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <script src="./sweetalert.min.js"></script>
+    <link rel="stylesheet" href="sweetalert2.min.css">
+    <script src="./sweetalert2.min.js"></script>
 </head>
 
 <body>
-    <template id="todo-template">
-        <form>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        <h3>Todo Items
-                            <a class="margin-top-15 pull-right btn btn-xs btn-info"
-                                data-toggle="collapse" href="#collapseExample" aria-expanded="false"
-                                aria-controls="collapseExample">New To Do</a>
-                        </h3>
-                    </div>
+    </br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <template id="todo-template">
+                    <form>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <h3>Todo Items
+                                        <a class="margin-top-15 pull-right btn btn-xs btn-info" data-toggle="collapse"
+                                            href="#collapseExample" aria-expanded="false"
+                                            aria-controls="collapseExample">New To
+                                            Do</a>
+                                    </h3>
+                                </div>
 
-                </div>
-                <div class="panel-body" id="todo-container">
-                    <div class="collapse" id="collapseExample">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="form-group">
-                                    <textarea class="form-control" id="description"></textarea>
-                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group margin-top-10">
-                                    <button type="submit" class="btn btn-success btn-block">Save</button>
+                            <div class="panel-body" id="todo-container">
+                                <div class="collapse" id="collapseExample">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <textarea class="form-control" id="description"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group margin-top-10">
+                                                <button type="submit" class="btn btn-success btn-block">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                <template id="single-todo">
+                                    <li class="list-group-item">
+                                        <ul class="list-unstyled list-inline">
+                                            <li>
+                                                <label class="pull-left"><input type="checkbox"></label>
+                                            </li>
+                                            <li>
+                                                <h4 class="list-group-item-heading"></h4>
+                                                <small></small>
+                                            </li>
+                                            <li class="pull-right">
+                                                <a href="javascript:void(0)" id="update-todo"
+                                                    class="btn btn-xs btn-default hidden"><i
+                                                        class="fa fa-save text-success"></i></a>
+                                                <a href="javascript:void(0)" id="edit-todo"
+                                                    class="btn btn-xs btn-default"><i class="fa fa-pencil"></i></a>
+                                                <a href="javascript:void(0)" id="delete-todo"
+                                                    class="btn btn-xs btn-default"><i
+                                                        class="fa fa-trash text-danger"></i></a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </template>
+                                <template id="todo-list">
+                                    <section class="todos">
+                                        <label> </label>
+                                        <ul class="list-group list-unstyled"></ul>
+                                    </section>
+                                </template>
                             </div>
                         </div>
-                    </div>
-                    <template id="single-todo">
-                        <li class="list-group-item" draggable="true">
-                            <ul class="list-unstyled list-inline">
-                                <li>
-                                    <label class="pull-left"><input type="checkbox"></label>
-                                </li>
-                                <li>
-                                    <h4 class="list-group-item-heading"></h4>
-                                    <small></small>
-                                </li>
-                                <li class="pull-right"><a href="javascript:void(0)" id="edit-todo"><i
-                                            class="fa fa-pencil"></i></a> <a href="javascript:void(0)"
-                                        id="delete-todo"><i class="fa fa-trash text-danger"></i></a></li>
-                            </ul>
-                        </li>
-                    </template>
-                    <template id="todo-list">
-                        <section class="todos">
-                            <label> </label>
-                            <ul class="list-group list-unstyled"></ul>
-                        </section>
-                    </template>
+                    </form>
+                </template>
+                <div id="todo">
+
                 </div>
             </div>
-        </form>
-    </template>
-    <div id="todo">
-
+        </div>
     </div>
     <script src="./app.js"></script>
     <script>

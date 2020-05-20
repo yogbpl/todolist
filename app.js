@@ -1,11 +1,11 @@
 "use strict";
-// autobind decorator
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+// autobind decorator
 function autobind(_, _2, descriptor) {
     const originalMethod = descriptor.value;
     const adjDesctiptor = {
@@ -103,8 +103,16 @@ class TodoState extends State {
             }
         }
     }
-    editTodo(todoId) {
+    editTodo(todoId, title, dateTime) {
         const todo = this.todos.find(tod => tod.id === todoId);
+        for (let i = 0; i < this.todos.length; i++) {
+            if (this.todos[i].id === (todo === null || todo === void 0 ? void 0 : todo.id)) {
+                this.todos[i].title = title;
+                this.todos[i].date = dateTime;
+                localStorage.setItem('todo', JSON.stringify(this.todos));
+                this.updateListeners();
+            }
+        }
     }
     updateListeners() {
         for (const listenerFn of this.listeners) {
@@ -132,11 +140,12 @@ class Component {
 // TodoItem Class
 class TodoItem extends Component {
     constructor(hostId, todo) {
-        super('single-todo', hostId, false, todo.id);
+        super('single-todo', hostId, true, todo.id);
         this.todos = [];
         this.todo = todo;
         this.configure();
         this.renderContent();
+        this.descriptionInputElement = this.element.querySelector("h4");
     }
     setCompleteHandler() {
         const todoId = this.element.id;
@@ -156,13 +165,40 @@ class TodoItem extends Component {
             todoState.deleteTodo(todoId);
         });
     }
+    editTodoHandler() {
+        const todoId = this.element.id;
+        this.descriptionInputElement.setAttribute("contenteditable", "true");
+        this.descriptionInputElement.classList.add('form-control');
+        this.element.querySelector("#edit-todo").classList.add('hidden');
+        this.element.querySelector("#update-todo").classList.remove('hidden');
+    }
+    updateTodoHandler() {
+        const todoId = this.element.id;
+        const userInput = this.gatherUserInput();
+        const dateTime = new Date().toDateString();
+        if (Array.isArray(userInput)) {
+            const [desc] = userInput;
+            todoState.editTodo(todoId, desc, dateTime);
+        }
+    }
     configure() {
+        this.element.querySelector("#update-todo").addEventListener('click', this.updateTodoHandler);
+        this.element.querySelector("#edit-todo").addEventListener('click', this.editTodoHandler);
         this.element.querySelector("#delete-todo").addEventListener('click', this.deleteTodoHandler);
         this.element.querySelector('input').addEventListener('change', this.setCompleteHandler);
     }
     renderContent() {
         this.element.querySelector('h4').textContent = this.todo.title;
         this.element.querySelector('small').textContent = this.todo.date;
+    }
+    gatherUserInput() {
+        const enterDescription = this.descriptionInputElement.innerHTML;
+        if (enterDescription.trim().length === 0) {
+            swal("invalid input", "Please try again", "error");
+            return;
+        }
+        else
+            return [enterDescription];
     }
 }
 __decorate([
@@ -171,6 +207,12 @@ __decorate([
 __decorate([
     autobind
 ], TodoItem.prototype, "deleteTodoHandler", null);
+__decorate([
+    autobind
+], TodoItem.prototype, "editTodoHandler", null);
+__decorate([
+    autobind
+], TodoItem.prototype, "updateTodoHandler", null);
 __decorate([
     autobind
 ], TodoItem.prototype, "configure", null);
