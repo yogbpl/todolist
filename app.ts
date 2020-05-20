@@ -49,11 +49,11 @@ function formValidation(validatableInput: Validatable) {
 // Move Active to Finished Interface
 
 interface SourseTodo {
-    setCompleteHandler(event: MouseEvent): void;
+    setCompleteHandler(event: MouseEvent): any;
 }
 
 interface TargetTodo {
-    setActiveHandler(event: MouseEvent): void;
+    setActiveHandler(event: MouseEvent): any;
 }
 
 
@@ -121,9 +121,28 @@ class TodoState extends State<Todo> {
         const todo = this.todos.find(tod => tod.id === todoId);
         if (todo) {
             todo.status = newStatus;
-            
-            this.updateListeners()
+            localStorage.setItem('todo', JSON.stringify(this.todos));
+            this.updateListeners();
         }
+    }
+
+    deleteTodo(todoId: string) {
+        const todo = this.todos.find(tod => tod.id === todoId);
+        
+        for(let i = 0; i<this.todos.length; i++)
+        {
+            if(this.todos[i].id === todo?.id)
+            {
+                this.todos.splice(i,1);
+                localStorage.setItem('todo', JSON.stringify(this.todos));
+                this.updateListeners();
+                
+            }    
+        }
+    }
+
+    editTodo(todoId: string){
+        const todo = this.todos.find(tod => tod.id === todoId);
     }
 
 
@@ -179,18 +198,38 @@ class TodoItem extends Component<HTMLUListElement, HTMLLIElement>
     }
 
     @autobind
-    setCompleteHandler(event: MouseEvent) {
+    setCompleteHandler() {
         const todoId = this.element.id;
-
         todoState.moveTodo(todoId, TodoStatus.Finished);
+
+    }
+
+    @autobind
+    deleteTodoHandler() {
+        const todoId = this.element.id;
+        swal({
+            title: 'Alert!',
+            text: "Do you want to Delete this Todo?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Cancel it!'
+        }).then(function () {
+            todoState.deleteTodo(todoId);
+        });
+
+
     }
 
     @autobind
     configure() {
-        this.element.querySelector('input')!.addEventListener('click', this.setCompleteHandler)
+        this.element.querySelector("#delete-todo")!.addEventListener('click', this.deleteTodoHandler);
+        this.element.querySelector('input')!.addEventListener('change', this.setCompleteHandler)
     }
 
     renderContent() {
+
         this.element.querySelector('h4')!.textContent = this.todo.title;
         this.element.querySelector('small')!.textContent = this.todo.date;
     }
